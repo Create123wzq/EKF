@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import math
 from EKF.tinyekf import EKF
-from EKF.utils import fromCameraToImage, draw, drawQuaternions, getImagePosition, fromImageToPixel, drawPoint, getQuaternion
+from EKF.utils import fromCameraToImage, draw, drawQuaternions, getImagePosition2, fromImageToPixel, drawPoint, getQuaternion
 
 
 DELAY_MSEC = 1 # 卡尔曼滤波计算时间间隔,单位为s
@@ -254,22 +254,22 @@ if __name__ == '__main__':
     # 测量值列表
     measured_points = []
     quaternions = []
-    for i in range(200):
+    for i in range(180):
         temp = []
         for index in indexs:
-            pos = getImagePosition(cube_points[index][0], cube_points[index][1], cube_points[index][2], 0, 0, i, 0)
+            pos = getImagePosition2(cube_points[index][0], cube_points[index][1], cube_points[index][2], 0, 0, i)
             # 相机坐标系转换到图像坐标系
             x, y = fromCameraToImage(pos[0], pos[1], pos[2])
             # temp.append((x, y))
             temp.append([x])
             temp.append([y])
 
-        quaternions.append(getQuaternion(0, 0, -i))
+        quaternions.append(getQuaternion(-45, 0, -i))
         measured_points.append(temp)
 
     # 验证坐标是否正确
-    # for i in range(200):
-    #     prefix = "/Users/apple/Desktop/实验/实验一/img/"
+    # for i in range(180):
+    #     prefix = "/Users/apple/Desktop/test/img/"
     #     filename = "img" + "0" * (4 - len(str(i))) + str(i) + ".jpg"
     #
     #     img = cv2.imread(prefix + filename)
@@ -277,24 +277,23 @@ if __name__ == '__main__':
     #     for p in measured_points[i]:
     #         result.append((fromImageToPixel(p[0], p[1])))
     #     drawPoint(img, result)
-    #     cv2.imwrite("test2/" + filename, img)
+    #     cv2.imwrite("test/" + filename, img)
 
 
     # 估计值列表
     kalman_points = []
     # 初值:小正方体坐标系原点在相机坐标系下的位置(y值要取反！！！！！！！！！！)
-    s0 = [0., 0., 2000]
+    s0 = [0., 0., 2121]
     # 初值:小正方体坐标系到相机坐标系坐标系旋转矩阵(四元数)
-    q0 = [0., 0., 0., 1.0]
+    q0 = [-0.383, 0., 0., 0.924]
     # M个特征点在小行星坐标系下的坐标（不随时间变化,y值要取反！！！！！！！！！！)
     points = [[-100., 100., -100.], [-100., -100., -100.], [100., -100., -100.], [100., 100., -100.]]
     # 初值：小行星坐标系x,y,z方向的角速度初值
     w0 = [0., 0., 0.]
-    #w0 = [0., 0.0, 0.]
     # 初值：小行星坐标原点在相机坐标系下x,y,z方向速度初值
     v0 = [0., 0., 0.]
 
-    # kalfilt = TrackerEKF(s0, q0, points, w0, v0, p=0.2,  q=0.002, r=0.000002)
+    # kalfilt = TrackerEKF(s0, q0, points, w0, v0, p=0.2,  q=0.0002, r=0.000002)
     kalfilt = TrackerEKF(s0, q0, points, w0, v0, p=0.02, q=0.0002, r=0.000002)
 
     for i in range(1, 180):
