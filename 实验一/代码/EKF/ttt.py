@@ -30,6 +30,21 @@ sympy.init_printing(use_latex=True)
 # state = sympy.Matrix([s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15])
 # print(H.jacobian(state))
 
+# 利用sympy求雅克比矩阵
+s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16 = sympy.symbols('s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16')
+# H = sympy.Matrix([s1 + (1-2*s9**2-2*s10**2)*s14 + (2*s8*s9-2*s7*s10)*s15 + (2*s8*s10+2*s7*s9)*s16])
+# state = sympy.Matrix([s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16 ])
+# print(H.jacobian(state))
+
+# H = sympy.Matrix([s2 + (2*s8*s9+2*s7*s10)*s14 + (1-2*s8**2-2*s10**2)*s15 + (2*s9*s10-2*s7*s8)*s16])
+# state = sympy.Matrix([s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16 ])
+# print(H.jacobian(state))
+
+H = sympy.Matrix([s3 +(2*s8*s10-2*s7*s9)*s14 + (2*s9*s10+2*s7*s8)*s15 + (1-2*s8**2-2*s9**2)*s16])
+state = sympy.Matrix([s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16 ])
+print(H.jacobian(state))
+
+
 
 
 # 在图上标注特征点位置
